@@ -62,6 +62,7 @@ TUTORIAL = environ.get('TUTORIAL', 'https://t.me/How_To_Open_Linkl')
 IS_TUTORIAL = bool(environ.get('IS_TUTORIAL', True))
 MSG_ALRT = environ.get('MSG_ALRT', 'Hello My Dear Friends ❤️')
 SUPPORT_CHAT = environ.get('SUPPORT_CHAT', 'vj_bot_disscussion')
+LOG_CHANNEL = int(os.environ.get("LOG_CHANNEL", 0)) or None
 P_TTI_SHOW_OFF = is_enabled((environ.get('P_TTI_SHOW_OFF', "False")), False)
 IMDB = is_enabled((environ.get('IMDB', "True")), True)
 AUTO_FFILTER = is_enabled((environ.get('AUTO_FFILTER', "True")), True)
