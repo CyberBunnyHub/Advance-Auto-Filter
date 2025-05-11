@@ -16,7 +16,7 @@ db = client["CyberBunny"]  # This selects your DB name
 instance = Instance.from_db(db)  # Correct way to instantiate
 
 from umongo import Document, fields
-from database import instance
+from database.ia_filterdb import instance
 
 @instance.register
 class Media(Document):
