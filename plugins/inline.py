@@ -51,67 +51,81 @@ async def answer(bot, query):
     offset = int(query.offset or 0)
     reply_markup = get_reply_markup(query=string)
     files, next_offset, total = await get_search_results(
-                                                  chat_id,
-                                                  string,
-                                                  file_type=file_type,
-                                                  max_results=10,
-                                                  offset=offset)
+        chat_id,
+        string,
+        file_type=file_type,
+        max_results=10,
+        offset=offset
+    )
 
     for file in files:
-        title=file.file_name
-        size=get_size(file.file_size)
-        f_caption=file.caption
+        title = file.file_name
+        size = get_size(file.file_size)
+        f_caption = file.caption
         if CUSTOM_FILE_CAPTION:
             try:
-                f_caption=CUSTOM_FILE_CAPTION.format(file_name= '' if title is None else title, file_size='' if size is None else size, file_caption='' if f_caption is None else f_caption)
+                f_caption = CUSTOM_FILE_CAPTION.format(
+                    file_name='' if title is None else title,
+                    file_size='' if size is None else size,
+                    file_caption='' if f_caption is None else f_caption
+                )
             except Exception as e:
                 logger.exception(e)
-                f_caption=f_caption
+                f_caption = f_caption
         if f_caption is None:
             f_caption = f"{file.file_name}"
-        results.append(
-            InlineQueryResultCachedDocument(
-                title=file.file_name,
-                document_file_id=file.file_id,
-                caption=f_caption,
-                description=f'Size: {get_size(file.file_size)}\nType: {file.file_type}',
-                reply_markup=reply_markup))
+
+        # Safe check for file_id
+        if not file.file_id or len(file.file_id) < 20:
+            continue
+
+        try:
+            results.append(
+                InlineQueryResultCachedDocument(
+                    title=file.file_name,
+                    document_file_id=file.file_id,
+                    caption=f_caption,
+                    description=f'Size: {get_size(file.file_size)}\nType: {file.file_type}',
+                    reply_markup=reply_markup
+                )
+            )
+        except Exception as e:
+            logger.error(f"Error adding result: {e}")
 
     if results:
         switch_pm_text = f"{emoji.FILE_FOLDER} Results - {total}"
         if string:
             switch_pm_text += f" for {string}"
         try:
-            await query.answer(results=results,
-                           is_personal = True,
-                           cache_time=cache_time,
-                           switch_pm_text=switch_pm_text,
-                           switch_pm_parameter="start",
-                           next_offset=str(next_offset))
+            await query.answer(
+                results=results,
+                is_personal=True,
+                cache_time=cache_time,
+                switch_pm_text=switch_pm_text,
+                switch_pm_parameter="start",
+                next_offset=str(next_offset)
+            )
         except QueryIdInvalid:
             pass
         except Exception as e:
-            logging.exception(str(e))
+            logger.exception(str(e))
     else:
         switch_pm_text = f'{emoji.CROSS_MARK} No results'
         if string:
             switch_pm_text += f' for "{string}"'
 
-        await query.answer(results=[],
-                           is_personal = True,
-                           cache_time=cache_time,
-                           switch_pm_text=switch_pm_text,
-                           switch_pm_parameter="okay")
-
+        await query.answer(
+            results=[],
+            is_personal=True,
+            cache_time=cache_time,
+            switch_pm_text=switch_pm_text,
+            switch_pm_parameter="okay"
+        )
 
 def get_reply_markup(query):
     buttons = [
         [
             InlineKeyboardButton('Search again', switch_inline_query_current_chat=query)
         ]
-        ]
+    ]
     return InlineKeyboardMarkup(buttons)
-
-
-
-
