@@ -8,26 +8,21 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from umongo import Instance
 from pymongo import MongoClient
 
-# MongoDB connection (adjust as needed)
-client = AsyncIOMotorClient("mongodb+srv://CyberBunny:Bunny2008@cyberbunny.5yyorwj.mongodb.net/CyberBunny?retryWrites=true&w=majority")
-db = client.get_default_database()
+from motor.motor_asyncio import AsyncIOMotorClient
+from umongo import Instance
 
-# Create a umongo instance
-instance = Instance(db)
-from umongo import Instance, Document, fields
+client = AsyncIOMotorClient("mongodb+srv://CyberBunny:Bunny2008@cyberbunny.5yyorwj.mongodb.net/?retryWrites=true&w=majority")
+db = client["CyberBunny"]  # This selects your DB name
+instance = Instance.from_db(db)  # Correct way to instantiate
 
-# Assuming 'instance' is already created elsewhere in your code like:
-# instance = Instance(db)
+from umongo import Document, fields
 
 @instance.register
-class MediaDataProxy(Document):
-    file_id = fields.StrField()  # <-- Add this line to fix the error
-
-    # Add any other fields your bot uses
+class Media(Document):
+    file_id = fields.StrField(required=True)
     file_name = fields.StrField()
-    size = fields.IntField()
-    mime_type = fields.StrField()
-    # ...etc
+    file_size = fields.IntField()
+
 from motor.motor_asyncio import AsyncIOMotorClient
 from marshmallow.exceptions import ValidationError
 from info import DATABASE_URI, DATABASE_NAME, COLLECTION_NAME, USE_CAPTION_FILTER, MAX_B_TN
