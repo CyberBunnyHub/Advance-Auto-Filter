@@ -75,22 +75,21 @@ async def answer(bot, query):
         if f_caption is None:
             f_caption = f"{file.file_name}"
 
-        # Safe check for file_id
-        if not file.file_id or len(file.file_id) < 20:
-            continue
+if not file.file_id or len(file.file_id) < 20:
+    continue  # Skip invalid file_id
 
-        try:
-            results.append(
-                InlineQueryResultCachedDocument(
-                    title=file.file_name,
-                    document_file_id=file.file_id,
-                    caption=f_caption,
-                    description=f'Size: {get_size(file.file_size)}\nType: {file.file_type}',
-                    reply_markup=reply_markup
-                )
-            )
-        except Exception as e:
-            logger.error(f"Error adding result: {e}")
+      try:
+          results.append(
+          InlineQueryResultCachedDocument(
+          title=file.file_name,
+          document_file_id=file.file_id,
+          caption=f_caption,
+          description=f'Size: {get_size(file.file_size)}\nType: {file.file_type}',
+          reply_markup=reply_markup
+        )
+    )
+except Exception as e:
+    logger.warning(f"Invalid document_file_id: {file.file_id} | Error: {e}")
 
     if results:
         switch_pm_text = f"{emoji.FILE_FOLDER} Results - {total}"
