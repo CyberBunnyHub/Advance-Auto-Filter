@@ -24,13 +24,18 @@ instance = Instance.from_db(db)
 # MongoDB Schema
 @instance.register
 class Media(Document):
-    _id = fields.StrField(attribute='_id', required=True)  # file_id as _id
+    _id = fields.StrField(attribute='_id', required=True)
+    file_id = fields.StrField(allow_none=True)  # <-- add this line
     file_ref = fields.StrField(allow_none=True)
     file_name = fields.StrField(required=True)
     file_size = fields.IntField(required=True)
     file_type = fields.StrField(allow_none=True)
     mime_type = fields.StrField(allow_none=True)
     caption = fields.StrField(allow_none=True)
+
+    class Meta:
+        collection_name = COLLECTION_NAME
+        indexes = ('$file_name',)
 
     class Meta:
         collection_name = COLLECTION_NAME
