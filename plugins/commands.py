@@ -203,7 +203,7 @@ async def start(client, message):
             logger.warning(f"Base64 decode failed: {e}")
             return
 
-  try:
+        try:
             f_msg_id, l_msg_id, f_chat_id, protect = decoded.split("_", 3)
         except:
             f_msg_id, l_msg_id, f_chat_id = decoded.split("_", 2)
