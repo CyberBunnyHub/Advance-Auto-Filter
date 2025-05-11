@@ -204,6 +204,7 @@ except (binascii.Error, ValueError) as e:
     await message.reply("Invalid or broken start parameter.")
     logger.warning(f"Base64 decode failed: {e}")
     return
+
         try:
             f_msg_id, l_msg_id, f_chat_id, protect = decoded.split("_", 3)
         except:
