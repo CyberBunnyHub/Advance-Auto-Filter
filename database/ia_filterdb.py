@@ -16,12 +16,18 @@ db = client["CyberBunny"]  # This selects your DB name
 instance = Instance.from_db(db)  # Correct way to instantiate
 
 from umongo import Document, fields
+from database import instance
 
 @instance.register
 class Media(Document):
     file_id = fields.StrField(required=True)
     file_name = fields.StrField()
     file_size = fields.IntField()
+    file_caption = fields.StrField()
+    mime_type = fields.StrField()
+    chat_id = fields.IntField()
+    message_id = fields.IntField()
+    file_unique_id = fields.StrField()
 
 from motor.motor_asyncio import AsyncIOMotorClient
 from marshmallow.exceptions import ValidationError
