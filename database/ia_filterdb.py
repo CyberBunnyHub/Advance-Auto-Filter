@@ -5,6 +5,19 @@ import base64
 from pyrogram.file_id import FileId
 from pymongo.errors import DuplicateKeyError
 from umongo import Instance, Document, fields
+
+# Assuming 'instance' is already created elsewhere in your code like:
+# instance = Instance(db)
+
+@instance.register
+class MediaDataProxy(Document):
+    file_id = fields.StrField()  # <-- Add this line to fix the error
+
+    # Add any other fields your bot uses
+    file_name = fields.StrField()
+    size = fields.IntField()
+    mime_type = fields.StrField()
+    # ...etc
 from motor.motor_asyncio import AsyncIOMotorClient
 from marshmallow.exceptions import ValidationError
 from info import DATABASE_URI, DATABASE_NAME, COLLECTION_NAME, USE_CAPTION_FILTER, MAX_B_TN
