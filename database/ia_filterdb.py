@@ -4,6 +4,16 @@ import re
 import base64
 from pyrogram.file_id import FileId
 from pymongo.errors import DuplicateKeyError
+from motor.motor_asyncio import AsyncIOMotorClient
+from umongo import Instance
+from pymongo import MongoClient
+
+# MongoDB connection (adjust as needed)
+client = AsyncIOMotorClient("mongodb+srv://CyberBunny:Bunny2008@cyberbunny.5yyorwj.mongodb.net/?retryWrites=true&w=majority")
+db = client.get_default_database()
+
+# Create a umongo instance
+instance = Instance(db)
 from umongo import Instance, Document, fields
 
 # Assuming 'instance' is already created elsewhere in your code like:
