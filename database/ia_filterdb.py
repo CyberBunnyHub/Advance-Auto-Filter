@@ -9,7 +9,7 @@ from umongo import Instance
 from pymongo import MongoClient
 
 # MongoDB connection (adjust as needed)
-client = AsyncIOMotorClient("mongodb+srv://CyberBunny:Bunny2008@cyberbunny.5yyorwj.mongodb.net/?retryWrites=true&w=majority")
+client = AsyncIOMotorClient("mongodb+srv://CyberBunny:Bunny2008@cyberbunny.5yyorwj.mongodb.net/CyberBunny?retryWrites=true&w=majority")
 db = client.get_default_database()
 
 # Create a umongo instance
