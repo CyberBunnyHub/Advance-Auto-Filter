@@ -124,7 +124,6 @@ async def gen_link_batch(bot, message):
     document=f"batchmode_{message.from_user.id}.json",
     file_name="Batch.json",
     caption="⚠️Generated for filestore."
-) 
-os.remove(f"batchmode_{message.from_user.id}.json")
+)
     file_id, ref = unpack_new_file_id(post.document.file_id)
     await sts.edit(f"Here is your link\nContains `{og_msg}` files.\n https://telegram.me/{temp.U_NAME}?start=BATCH-{file_id}")
