@@ -194,13 +194,15 @@ async def start(client, message):
     elif data.split("-", 1)[0] == "DSTORE":
         sts = await message.reply("<b>Please wait...</b>")
         b_string = data.split("-", 1)[1]
-  try:
-      padded = b_string + "=" * (-len(b_string) % 4)
-      decoded = base64.urlsafe_b64decode(padded).decode("ascii")
-      except (binascii.Error, ValueError) as e:
-      await sts.edit("Invalid or corrupted link. Please try again.")
-      logger.warning(f"Base64 decode failed: {e}")
-      return
+  # Line 197 onward — fully fixed block
+        try:
+            padded = b_string + "=" * (-len(b_string) % 4)
+            decoded = base64.urlsafe_b64decode(padded).decode("ascii")
+        except (binascii.Error, ValueError) as e:
+            await sts.edit("Invalid or corrupted link. Please try again.")
+            logger.warning(f"Base64 decode failed: {e}")
+            return
+
   try:
             f_msg_id, l_msg_id, f_chat_id, protect = decoded.split("_", 3)
         except:
