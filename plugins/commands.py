@@ -247,7 +247,16 @@ async def start(client, message):
 
     files_ = await get_file_details(file_id)           
     if not files_:
-        pre, file_id = ((base64.urlsafe_b64decode(data + "=" * (-len(data) % 4))).decode("ascii")).split("_", 1)
+import binascii
+
+      try:
+          padded = data + "=" * (-len(data) % 4)
+    decoded = base64.urlsafe_b64decode(padded).decode("ascii")
+    pre, file_id = decoded.split("_", 1)
+except (binascii.Error, ValueError) as e:
+    await message.reply("Invalid or broken start parameter.")
+    logger.warning(f"Base64 decode failed: {e}")
+    return
         try:
             msg = await client.send_cached_media(
                 chat_id=message.from_user.id,
